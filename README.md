@@ -22,4 +22,3 @@ La  ***prima fase*** comprende:
 6. **Cocnlusioni**
 7. **Relazione tecnica** finale del progetto realizzata in markdown
 8. **Conversione del documento in PDF** tramite *pandoc*
-
