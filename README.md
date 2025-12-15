@@ -37,23 +37,29 @@ Il sistema prevede un database per la gestione di un centro polispecialistico. F
         STORICO ||--o{ PAZIENTE : prenota
         STORICO |{--o{ PRENOTAZIONE : prenota
         MEDICO o{--|| PRENOTAZIONE : chiamato
+        MEDICO ||--|{ REPARTO : lavora
+        REPARTO |{--o| AMBULATORIO : sta
+        ESAME ||--o{ AMBULATORIO : svolto
+        ESAME ||--o{ MEDICO : effettua
+        MEDICO |{--|{ ORARIOLAVORO : turno
 
         FATTURA {
-            int codiceFattura
-            int FKPagamento
+            int codiceFattura PK
+            int FKPagamento FK
         }
 
         PAGAMENTO {
-            int codicePagamento
+            int codicePagamento PK
+            string codiceFiscale FK
             date data
             int ora
             int minuti
             double somma
-            enum metodo
+            enum metodo "card / cash"
         }
 
         PAZIENTE {
-            string codiceFiscale
+            string codiceFiscale PK
             string nome
             string cognome
             date dataNascita
@@ -65,10 +71,66 @@ Il sistema prevede un database per la gestione di un centro polispecialistico. F
         }
 
         STORICO {
-            int FKVisita
+            int codiceEsame PK "FK"
+            date data PK
+            int oraInizio PK
+            string codiceFiscale FK
+            int oraFine "NULL"
             string diagnosi
             string prescrizione
         }
 
+        PRENOTAZIONE {
+            int codicePrenotazione PK
+            string codiceFiscale FK
+            string codiceMedico FK
+            date data
+            int oraInizio
+            int oraFine "NULL"
+            string tipoVisita
+        }
+
+        MEDICO {
+            string codiceMedico PK
+            int codiceReparto FK
+            string codiceFiscale "UNIQUE"
+            string nome
+            string cognome
+            binary primario "NULL"
+        }
+
+        REPARTO {
+            int codiceReparto PK
+            string nomeReparto
+        }
+
+        AMBULATORIO {
+            int codiceAmbulatorio PK
+            int codiceReparto FK
+            int piano
+        }
+
+        ESAME {
+            int codiceEsame PK
+            string diagnosi
+            string referto "NULL"
+        }
+
+        ORARIOLAVORO {
+            enum giorno PK "L / M / Me / G / V / S / D"
+            int oraInizio PK
+            int oraFine
+        }
+
+        SPECIALIZZAZIONE {
+            string codiceSpecializzazione PK
+            string codiceMedico FK
+            enum tipo "Medica / Chirurgia / Clinica"
+            string titolo
+            date dataConseguimento
+            int votoConseguimento
+        }
         
 ```
+
+## Schema Logico Relazionale
