@@ -42,6 +42,7 @@ Il sistema prevede un database per la gestione di un centro polispecialistico. F
         ESAME ||--o{ AMBULATORIO : svolto
         ESAME ||--o{ MEDICO : effettua
         MEDICO |{--|{ ORARIOLAVORO : turno
+        MEDICO o{--|| SPECIALIZZAZIONE : possiede
 
         FATTURA {
             int codiceFattura PK
@@ -93,6 +94,7 @@ Il sistema prevede un database per la gestione di un centro polispecialistico. F
         MEDICO {
             string codiceMedico PK
             int codiceReparto FK
+            string orario FK
             string codiceFiscale "UNIQUE"
             string nome
             string cognome
@@ -112,6 +114,8 @@ Il sistema prevede un database per la gestione di un centro polispecialistico. F
 
         ESAME {
             int codiceEsame PK
+            int codiceAmbulatorio FK
+            string codiceMedico FK
             string diagnosi
             string referto "NULL"
         }
