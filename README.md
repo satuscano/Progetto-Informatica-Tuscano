@@ -43,6 +43,8 @@ Il sistema prevede un database per la gestione di un centro polispecialistico. F
         ESAME ||--o{ MEDICO : effettua
         MEDICO |{--|{ ORARIOLAVORO : turno
         MEDICO o{--|| SPECIALIZZAZIONE : possiede
+        MEDICO ||--o{ MEDICO_ORARIOLAVORO : ausiliaria
+        MEDICO_ORARIOLAVORO }o--|| ORARIOLAVORO : ausiliaria
 
         FATTURA {
             int codiceFattura PK
@@ -94,7 +96,6 @@ Il sistema prevede un database per la gestione di un centro polispecialistico. F
         MEDICO {
             string codiceMedico PK
             int codiceReparto FK
-            string orario FK
             string codiceFiscale "UNIQUE"
             string nome
             string cognome
@@ -134,7 +135,73 @@ Il sistema prevede un database per la gestione di un centro polispecialistico. F
             date dataConseguimento
             int votoConseguimento
         }
+
+        MEDICO_ORARIOLAVORO {
+            string codiceMedico PK
+            enum giorno PK "L / M / Me / G / V / S / D"
+            int oraInizio PK
+        }
         
 ```
 
 ## Schema Logico Relazionale
+**PAGAMENTO** (<u>codicePagamento</u>, codiceFiscale, data, ora, minuti, somma, metodo)
+
+**FATTURA** (<u>codiceFattura</u>, codicePagamento)
+
+**PAZIENTE** (<u>codiceFiscale</u>, nome, cognome, dataNascita, anamnesi, ind_cap, ind_citta, ind_via, ind_civico)
+
+**STORICO** (<u>codiceEsame</u>, <u>data</u>, <u>oraInizio</u>, codiceFiscale, oraFine*, diagnosi, prescrizione)
+
+**PRENOTAZIONE** (<u>codicePrenotazione</u>, codiceFiscale, codiceMedico, data, oraInizio, oraFine*, tipoVisita)
+
+**MEDICO** (<u>codiceMedico</u>, codiceReparto, orario, codiceFiscale (UNIQUE), nome, cognome, primario*)
+
+**REPARTO** (<u>codiceReparto</u>, nomeReparto)
+
+**AMBULATORIO** (<u>codiceAmbulatorio</u>, codiceReparto, piano)
+
+**ESAME** (<u>codiceEsame</u>, codiceAmbulatorio, codiceMedico, diagnosi, referto*)
+
+**ORARIOLAVORO** (<u>giorno</u>, <u>oraInizio</u>, oraFine)
+
+**SPECIALIZZAZIONE** (<u>codiceSpecializzazione</u>, codiceMedico, tipo, titolo, dataConseguimento, votoConseguimento)
+
+**MEDICO_ORARIOLAVORO** (<u>codiceMedico</u>, <u>giorno</u>, <u>oraInizio</u>)
+
+---
+
+## DDL (Data Definition Language)
+
+```
+Il DDL è l'insieme di comandi SQL (Structured Query Language) utilizzati per definire, creare e modificare la struttura di un Database. Grazie ad esso è possibile creare tabelle, record, attributi e relazioni tra entità specificandone le Primary Key e le Foreign Key per garantire l'integrità dei dati. Inoltre, permette di applicare vincoli Intra-Relazionali e Inter-Relazionali in modo da mantenere il Database coerente e affidabile.
+```
+
+_Di seguito le porzioni di codice salienti con le relative spiegazioni._
+
+### Ruolo delle Chiavi Primarie
+Come detto in precedenza, le **Chiavi Primarie** (o Primary Key), serovno per mantenere l'integrità dei dati e l'univocità dei vari record all'interno di una tabella.
+
+_Esempio:_
+```sql
+    CREATE TABLE PAGAMENTO (
+        codicePagamento INT PRIMARY KEY,
+        ...
+    )
+```
+In questo caso, i record all'interno della tabella "PAGAMENTO" saranno identificati dal <u>"codicePagamento"</u>.
+
+### Ruolo delle Chiavi Esterne
+Al contrario delle chiavi primarie, le **Chiavi Esterne** (o Foreign Key) hanno la funzione di creare una relazione tra 2 entità.
+
+_Esempio:_
+```sql
+    CREATE TABLE PAGAMENTO (
+        CREATE TABLE PAGAMENTO (
+            ...
+            codiceFiscale VARCHAR(16),
+            FOREIGN KEY (codiceFiscale) REFERENCES PAZIENTE(codiceFiscale),
+            ...
+    )
+```
+Nell'esempio riportato, l'attributo <u>"codiceFiscale"</u> è 
