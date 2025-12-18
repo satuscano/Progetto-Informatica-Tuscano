@@ -1,0 +1,84 @@
+PAZIENTE
+Attributo	Tipo	Descrizione
+codiceFiscale	VARCHAR(16)	Identificativo univoco del paziente
+nome	VARCHAR(50)	Nome del paziente
+cognome	VARCHAR(50)	Cognome del paziente
+dataNascita	DATE	Data di nascita del paziente
+anamnesi	TEXT	Informazioni cliniche pregresse del paziente
+ind_cap	VARCHAR(10)	CAP dell’indirizzo di residenza
+ind_citta	VARCHAR(50)	Città di residenza
+ind_via	VARCHAR(50)	Via di residenza
+ind_civico	VARCHAR(10)	Numero civico
+PAGAMENTO
+Attributo	Tipo	Descrizione
+codicePagamento	INT	Identificativo univoco del pagamento
+codiceFiscale	VARCHAR(16)	Paziente che effettua il pagamento
+data	DATE	Data del pagamento
+ora	INT	Ora del pagamento
+minuti	INT	Minuti del pagamento
+somma	DOUBLE	Importo del pagamento
+metodo	VARCHAR(20)	Metodo di pagamento (cash o card)
+FATTURA
+Attributo	Tipo	Descrizione
+codiceFattura	INT	Identificativo univoco della fattura
+codicePagamento	INT	Pagamento a cui la fattura si riferisce
+MEDICO
+Attributo	Tipo	Descrizione
+codiceMedico	VARCHAR(10)	Identificativo univoco del medico
+codiceReparto	INT	Reparto di appartenenza
+codiceFiscale	VARCHAR(16)	Codice fiscale del medico
+nome	VARCHAR(50)	Nome del medico
+cognome	VARCHAR(50)	Cognome del medico
+primario	BOOLEAN	Indica se il medico è primario
+REPARTO
+Attributo	Tipo	Descrizione
+codiceReparto	INT	Identificativo univoco del reparto
+nomeReparto	VARCHAR(50)	Nome del reparto
+AMBULATORIO
+Attributo	Tipo	Descrizione
+codiceAmbulatorio	INT	Identificativo univoco dell’ambulatorio
+codiceReparto	INT	Reparto di appartenenza
+piano	INT	Piano dell’edificio
+ESAME
+Attributo	Tipo	Descrizione
+codiceEsame	INT	Identificativo univoco dell’esame
+codiceAmbulatorio	INT	Ambulatorio in cui si svolge
+codiceMedico	VARCHAR(10)	Medico che effettua l’esame
+diagnosi	TEXT	Diagnosi dell’esame
+referto	TEXT	Referto medico (opzionale)
+PRENOTAZIONE
+Attributo	Tipo	Descrizione
+codicePrenotazione	INT	Identificativo univoco della prenotazione
+codiceFiscale	VARCHAR(16)	Paziente che prenota
+codiceMedico	VARCHAR(10)	Medico assegnato
+data	DATE	Data della prenotazione
+oraInizio	INT	Ora di inizio
+oraFine	INT	Ora di fine (opzionale)
+tipoVisita	VARCHAR(50)	Tipologia di visita
+STORICO
+Attributo	Tipo	Descrizione
+codiceEsame	INT	Esame svolto
+data	DATE	Data dell’esame
+oraInizio	INT	Ora di inizio
+codiceFiscale	VARCHAR(16)	Paziente coinvolto
+oraFine	INT	Ora di fine (opzionale)
+diagnosi	TEXT	Diagnosi
+prescrizione	TEXT	Prescrizione medica
+ORARIOLAVORO
+Attributo	Tipo	Descrizione
+giorno	VARCHAR(2)	Giorno della settimana
+oraInizio	INT	Ora di inizio turno
+oraFine	INT	Ora di fine turno
+MEDICO_ORARIOLAVORO
+Attributo	Tipo	Descrizione
+codiceMedico	VARCHAR(10)	Medico assegnato al turno
+giorno	VARCHAR(2)	Giorno del turno
+oraInizio	INT	Ora di inizio turno
+SPECIALIZZAZIONE
+Attributo	Tipo	Descrizione
+codiceSpecializzazione	VARCHAR(20)	Identificativo della specializzazione
+codiceMedico	VARCHAR(10)	Medico specializzato
+tipo	VARCHAR(30)	Tipo di specializzazione
+titolo	VARCHAR(50)	Titolo conseguito
+dataConseguimento	DATE	Data di conseguimento
+votoConseguimento	INT	Voto finale
