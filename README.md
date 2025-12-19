@@ -7,11 +7,12 @@ toc-depth: 10
 header-includes: |
     \usepackage{fancyhdr}
     \usepackage{lastpage}
+    \usepackage{ragged2e}
+    \justifying
     \pagestyle{fancy}
     \fancyhf{}
     \rhead{Progetto Applicazione Web}
-    \lhead{Progetto Applicazione Web}
-    \cfoot{\footnotesize Data: \today \quad | \quad pag. \thepage\ di \pageref{LastPage}}
+    \cfoot{\footnotesize \today \quad | \quad pag. \thepage\ di \pageref{LastPage}}
 ---
 
 # Progetto Applicazione Web
@@ -159,29 +160,29 @@ Il sistema prevede un database per la gestione di un centro polispecialistico. F
 <div style="page-break-after: always"></div>   
 
 ## Schema Logico Relazionale
-**PAGAMENTO** (<u>codicePagamento</u>, codiceFiscale, data, ora, minuti, somma, metodo)
+**PAGAMENTO** (#<u>codicePagamento</u>, codiceFiscale, data, ora, minuti, somma, metodo)
 
-**FATTURA** (<u>codiceFattura</u>, codicePagamento)
+**FATTURA** (#<u>codiceFattura</u>, codicePagamento)
 
-**PAZIENTE** (<u>codiceFiscale</u>, nome, cognome, dataNascita, anamnesi, ind_cap, ind_citta, ind_via, ind_civico)
+**PAZIENTE** (#<u>codiceFiscale</u>, nome, cognome, dataNascita, anamnesi, ind_cap, ind_citta, ind_via, ind_civico)
 
-**STORICO** (<u>codiceEsame</u>, <u>data</u>, <u>oraInizio</u>, codiceFiscale, oraFine*, diagnosi, prescrizione)
+**STORICO** (#<u>codiceEsame</u>, #<u>data</u>, #<u>oraInizio</u>, codiceFiscale, oraFine*, diagnosi, prescrizione)
 
-**PRENOTAZIONE** (<u>codicePrenotazione</u>, codiceFiscale, codiceMedico, data, oraInizio, oraFine*, tipoVisita)
+**PRENOTAZIONE** (#<u>codicePrenotazione</u>, codiceFiscale, codiceMedico, data, oraInizio, oraFine*, tipoVisita)
 
-**MEDICO** (<u>codiceMedico</u>, codiceReparto, orario, codiceFiscale (UNIQUE), nome, cognome, primario*)
+**MEDICO** (#<u>codiceMedico</u>, codiceReparto, orario, codiceFiscale (UNIQUE), nome, cognome, primario*)
 
-**REPARTO** (<u>codiceReparto</u>, nomeReparto)
+**REPARTO** (#<u>codiceReparto</u>, nomeReparto)
 
-**AMBULATORIO** (<u>codiceAmbulatorio</u>, codiceReparto, piano)
+**AMBULATORIO** (#<u>codiceAmbulatorio</u>, codiceReparto, piano)
 
-**ESAME** (<u>codiceEsame</u>, codiceAmbulatorio, codiceMedico, diagnosi, referto*)
+**ESAME** (#<u>codiceEsame</u>, codiceAmbulatorio, codiceMedico, diagnosi, referto*)
 
-**ORARIOLAVORO** (<u>giorno</u>, <u>oraInizio</u>, oraFine)
+**ORARIOLAVORO** (#<u>giorno</u>, #<u>oraInizio</u>, oraFine)
 
-**SPECIALIZZAZIONE** (<u>codiceSpecializzazione</u>, codiceMedico, tipo, titolo, dataConseguimento, votoConseguimento)
+**SPECIALIZZAZIONE** (#<u>codiceSpecializzazione</u>, codiceMedico, tipo, titolo, dataConseguimento, votoConseguimento)
 
-**MEDICO_ORARIOLAVORO** (<u>codiceMedico</u>, <u>giorno</u>, <u>oraInizio</u>)
+**MEDICO_ORARIOLAVORO** (#<u>codiceMedico</u>, #<u>giorno</u>, #<u>oraInizio</u>)
 
 ---
 
@@ -265,7 +266,9 @@ _Esempio:_
     ...
 ```
 Il vincolo di integrità in questione stabilisce se vi è una vera relazione tra le FK dei record della tabella "PAGAMENTO" e le PK dei record nella tabella "PAZIENTI". Nel caso in cui il vincolo non sia rispettato, si può gestire l'errore in due metodi differenti:
+
 1. Utilizzo de **CASCADE** -> <u>propagazione automatica dell'eliminazione o modifica delle tabelle</u> referenziate / referenzianti garantendone la coerenza e l'integrità
+
 2. Utilizzo de **RESTRICT** -> <u>impedimento dell'eliminazione o della modifica</u> di un record nella tabella referenziante nel caso in cui esistano dei record correlati nelle tabelle referenziate, preservandone l'integrità
 
 ---
@@ -274,88 +277,124 @@ Il vincolo di integrità in questione stabilisce se vi è una vera relazione tra
 
 ## Dizionario dei Dati
 **FATTURA**
-+ codiceFattura	INT	- Identificativo univoco della fattura
-+ codicePagamento INT - Pagamento a cui la fattura si riferisce
+
+\begin{itemize}
+\item codiceFattura	INT	- Identificativo univoco della fattura
+\item codicePagamento INT - Pagamento a cui la fattura si riferisce
+\end{itemize}
 
 **PAGAMENTO**
-+ codicePagamento INT - Identificatore univoco del pagamento
-+ codiceFiscale	VARCHAR(16)	- Paziente che effettua il pagamento
-+ data	DATE - Data del pagamento
-+ ora INT - Ora del pagamento
-+ minuti INT - Minuti del pagamento
-+ somma	DOUBLE - Importo del pagamento
-+ metodo VARCHAR(20) - Metodo di pagamento
+
+\begin{itemize}
+\item codicePagamento INT - Identificatore univoco del pagamento
+\item codiceFiscale	VARCHAR(16)	- Paziente che effettua il pagamento
+\item data	DATE - Data del pagamento
+\item ora INT - Ora del pagamento
+\item minuti INT - Minuti del pagamento
+\item somma	DOUBLE - Importo del pagamento
+\item metodo VARCHAR(20) - Metodo di pagamento
+\end{itemize}
 
 **PAZIENTE**
-+ codiceFiscale	VARCHAR(16)	- Identificativo univoco del paziente
-+ nome VARCHAR(50) - Nome del paziente
-+ cognome VARCHAR(50) - Cognome del paziente
-+ dataNascita DATE - Data di nascita del paziente
-+ anamnesi TEXT	- Informazioni cliniche pregresse del paziente
-+ ind_cap VARCHAR(10) - CAP dell’indirizzo di residenza
-+ ind_citta	VARCHAR(50)	- Città di residenza
-+ ind_via VARCHAR(50) - Via di residenza
-+ ind_civico VARCHAR(10) - Numero civico
+
+\begin{itemize}
+\item codiceFiscale	VARCHAR(16)	- Identificativo univoco del paziente
+\item nome VARCHAR(50) - Nome del paziente
+\item cognome VARCHAR(50) - Cognome del paziente
+\item dataNascita DATE - Data di nascita del paziente
+\item anamnesi TEXT - Informazioni cliniche pregresse del paziente
+\item cap VARCHAR(10) - CAP dell’indirizzo di residenza
+\item citta VARCHAR(50) - Città di residenza
+\item via VARCHAR(50) - Via di residenza
+\item civico VARCHAR(10) - Numero civico
+\end{itemize}
 
 **STORICO**
-+ codiceEsame INT - Esame svolto
-+ data DATE - Data dell’esame
-+ oraInizio INT - Ora di inizio
-+ codiceFiscale VARCHAR(16) - Paziente coinvolto
-+ oraFine INT - Ora di fine (opzionale)
-+ diagnosi TEXT - Diagnosi medica
-+ prescrizione TEXT - Prescrizione medica
+
+\begin{itemize}
+\item codiceEsame INT - Esame svolto
+\item data DATE - Data dell’esame
+\item oraInizio INT - Ora di inizio
+\item codiceFiscale VARCHAR(16) - Paziente coinvolto
+\item oraFine INT - Ora di fine (opzionale)
+\item diagnosi TEXT - Diagnosi medica
+\item prescrizione TEXT - Prescrizione medica
+\end{itemize}
 
 **PRENOTAZIONE**
-+ codicePrenotazione INT - Identificativo univoco della prenotazione
-+ codiceFiscale	VARCHAR(16)	- Paziente che prenota
-+ codiceMedico VARCHAR(10) - Medico assegnato
-+ data DATE	- Data della prenotazione
-+ oraInizio	INT - Ora di inizio
-+ oraFine INT - Ora di fine (opzionale)
-+ tipoVisita VARCHAR(50) - Tipologia di visita
+
+\begin{itemize}
+\item codicePrenotazione INT - Identificativo univoco della prenotazione
+\item codiceFiscale	VARCHAR(16)	- Paziente che prenota
+\item codiceMedico VARCHAR(10) - Medico assegnato
+\item data DATE	- Data della prenotazione
+\item oraInizio	INT - Ora di inizio
+\item oraFine INT - Ora di fine (opzionale)
+\item tipoVisita VARCHAR(50) - Tipologia di visita
+\end{itemize}
 
 **MEDICO**
-+ codiceMedico VARCHAR(10) - Identificativo univoco del medico
-+ codiceReparto INT - Reparto di appartenenza
-+ codiceFiscale VARCHAR(16) - Codice fiscale del medico
-+ nome VARCHAR(50) - Nome del medico
-+ cognome VARCHAR(50) - Cognome del medico
-+ primario BINARY - Indica se il medico è primario
+
+\begin{itemize}
+\item codiceMedico VARCHAR(10) - Identificativo univoco del medico
+\item codiceReparto INT - Reparto di appartenenza
+\item codiceFiscale VARCHAR(16) - Codice fiscale del medico
+\item nome VARCHAR(50) - Nome del medico
+\item cognome VARCHAR(50) - Cognome del medico
+\item primario BINARY - Indica se il medico è primario
+\end{itemize}
 
 **REPARTO**
-+ codiceReparto INT - Identificativo univoco del reparto
-+ nomeReparto VARCHAR(50) - Nome del reparto
+
+\begin{itemize}
+\item codiceReparto INT - Identificativo univoco del reparto
+\item nomeReparto VARCHAR(50) - Nome del reparto
+\end{itemize}
 
 **AMBULATORIO**
-+ codiceAmbulatorio INT - Identificativo univoco dell’ambulatorio
-+ codiceReparto INT - Reparto di appartenenza
-+ piano INT - Piano dell’edificio
+
+\begin{itemize}
+\item codiceAmbulatorio INT - Identificativo univoco dell’ambulatorio
+\item codiceReparto INT - Reparto di appartenenza
+\item piano INT - Piano dell’edificio
+\end{itemize}
 
 **ESAME**
-+ codiceEsame INT - Identificativo univoco dell’esame
-+ codiceAmbulatorio	INT	- Ambulatorio in cui si svolge
-+ codiceMedico VARCHAR(10) - Medico che effettua l’esame
-+ diagnosi TEXT - Diagnosi dell’esame
-+ referto TEXT - Referto medico (opzionale)
+
+\begin{itemize}
+\item codiceEsame INT - Identificativo univoco dell’esame
+\item codiceAmbulatorio	INT	- Ambulatorio in cui si svolge
+\item codiceMedico VARCHAR(10) - Medico che effettua l’esame
+\item diagnosi TEXT - Diagnosi dell’esame
+\item referto TEXT - Referto medico (opzionale)
+\end{itemize}
 
 **ORARIOLAVORO**
-+ giorno VARCHAR(2) - Giorno della settimana
-+ oraInizio INT - Ora di inizio turno
-+ oraFine INT - Ora di fine turno
+
+\begin{itemize}
+\item giorno VARCHAR(2) - Giorno della settimana
+\item oraInizio INT - Ora di inizio turno
+\item oraFine INT - Ora di fine turno
+\end{itemize}
 
 **SPECIALIZZAZIONE**
-+ codiceSpecializzazione VARCHAR(20) - Identificativo della specializzazione
-+ codiceMedico VARCHAR(10) - Medico specializzato
-+ tipo VARCHAR(30) - Tipo di specializzazione
-+ titolo VARCHAR(50) - Titolo conseguito
-+ dataConseguimento DATE - Data di conseguimento
-+ votoConseguimento INT - Voto finale
+
+\begin{itemize}
+\item codiceSpecializzazione VARCHAR(20) - Identificativo della specializzazione
+\item codiceMedico VARCHAR(10) - Medico specializzato
+\item tipo VARCHAR(30) - Tipo di specializzazione
+\item titolo VARCHAR(50) - Titolo conseguito
+\item dataConseguimento DATE - Data di conseguimento
+\item votoConseguimento INT - Voto finale
+\end{itemize}
 
 **MEDICO_ORARIOLAVORO**
-+ codiceMedico VARCHAR(10) - Medico assegnato al turno
-+ giorno VARCHAR(2) - Giorno del turno
-+ oraInizio INT - Ora di inizio turno
+
+\begin{itemize}
+\item codiceMedico VARCHAR(10) - Medico assegnato al turno
+\item giorno VARCHAR(2) - Giorno del turno
+\item oraInizio INT - Ora di inizio turno
+\end{itemize}
 
 ---
 
@@ -366,4 +405,4 @@ Ho sviluppato il progetto in maniera più dettagliata possibile, definendo l'**a
 
 Le mie <u>scelte progettuali</u> sono mirate all'integrità e alla coerenza dei dati, favorendo inoltre il fattore di **scalabilità** per limplementazione futura. Infatti, il modello relazionale che ho proposto consente la <u>gestione delle varie entità</u>, facilitandone il controllo e i <u>vincoli</u> all'interno del Database.
 
-Come **sviluppi successivi** si propongono l'effettivo applicativo web e l'implementazione di un sistema di query adatte ad un carico reale di dati. 
+Come **sviluppi successivi** si propongono l'effettivo applicativo web e l'implementazione di un sistema di query adatte ad un carico reale di dati.

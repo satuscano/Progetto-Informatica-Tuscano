@@ -1,0 +1,112 @@
+    erDiagram
+        FATTURA o|--|| PAGAMENTO : riferisce
+        PAGAMENTO ||--o{ PAZIENTE : paga
+        PRENOTAZIONE ||--|{ PAZIENTE : prenota
+        STORICO ||--o{ PAZIENTE : prenota
+        STORICO |{--o{ PRENOTAZIONE : prenota
+        MEDICO o{--|| PRENOTAZIONE : chiamato
+        MEDICO ||--|{ REPARTO : lavora
+        REPARTO |{--o| AMBULATORIO : sta
+        ESAME ||--o{ AMBULATORIO : svolto
+        ESAME ||--o{ MEDICO : effettua
+        MEDICO |{--|{ ORARIOLAVORO : turno
+        MEDICO o{--|| SPECIALIZZAZIONE : possiede
+        MEDICO ||--o{ MEDICO_ORARIOLAVORO : ausiliaria
+        MEDICO_ORARIOLAVORO }o--|| ORARIOLAVORO : ausiliaria
+
+        FATTURA {
+            int codiceFattura PK
+            int FKPagamento FK
+        }
+
+        PAGAMENTO {
+            int codicePagamento PK
+            string codiceFiscale FK
+            date data
+            int ora
+            int minuti
+            double somma
+            enum metodo "card / cash"
+        }
+
+        PAZIENTE {
+            string codiceFiscale PK
+            string nome
+            string cognome
+            date dataNascita
+            string anamnesi
+            string ind_cap
+            string ind_citta
+            string ind_via
+            string ind_civico
+        }
+
+        STORICO {
+            int codiceEsame PK "FK"
+            date data PK
+            int oraInizio PK
+            string codiceFiscale FK
+            int oraFine "NULL"
+            string diagnosi
+            string prescrizione
+        }
+
+        PRENOTAZIONE {
+            int codicePrenotazione PK
+            string codiceFiscale FK
+            string codiceMedico FK
+            date data
+            int oraInizio
+            int oraFine "NULL"
+            string tipoVisita
+        }
+
+        MEDICO {
+            string codiceMedico PK
+            int codiceReparto FK
+            string codiceFiscale "UNIQUE"
+            string nome
+            string cognome
+            binary primario "NULL"
+        }
+
+        REPARTO {
+            int codiceReparto PK
+            string nomeReparto
+        }
+
+        AMBULATORIO {
+            int codiceAmbulatorio PK
+            int codiceReparto FK
+            int piano
+        }
+
+        ESAME {
+            int codiceEsame PK
+            int codiceAmbulatorio FK
+            string codiceMedico FK
+            string diagnosi
+            string referto "NULL"
+        }
+
+        ORARIOLAVORO {
+            enum giorno PK "L / M / Me / G / V / S / D"
+            int oraInizio PK
+            int oraFine
+        }
+
+        SPECIALIZZAZIONE {
+            string codiceSpecializzazione PK
+            string codiceMedico FK
+            enum tipo "Medica / Chirurgia / Clinica"
+            string titolo
+            date dataConseguimento
+            int votoConseguimento
+        }
+
+        MEDICO_ORARIOLAVORO {
+            string codiceMedico PK
+            enum giorno PK "L / M / Me / G / V / S / D"
+            int oraInizio PK
+        }
+        

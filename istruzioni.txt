@@ -1,5 +1,5 @@
 PNDOC:
-pandoc README.md -o relazione.pdf --pdf-engine=xelatex
+andoc README.md --lua-filter=mermaid.lua --pdf-engine=xelatex -o relazione.pdf
 
 GITHUB:
 git add .
