@@ -19,7 +19,7 @@ CREATE TABLE PAGAMENTO (
     CONSTRAINT check_metodo CHECK(metodo IN ('card', 'cash')),
     CONSTRAINT check_data CHECK(data <= CURRENT_DATE),
 
-    CONSTRAINT check_ora_minuti_consistency CHECK(
+    CONSTRAINT check_ora_minuti CHECK(
         (ora IS NULL AND minuti IS NULL) OR (ora IS NOT NULL AND minuti IS NOT NULL)
     )
 );
@@ -33,7 +33,7 @@ CREATE TABLE FATTURA (
         REFERENCES PAGAMENTO(codicePagamento)
         ON DELETE CASCADE
         ON UPDATE CASCADE,
-    CONSTRAINT check_codicePagamento_positive CHECK(codicePagamento > 0)
+    CONSTRAINT check_codicePagamento CHECK(codicePagamento > 0)
 );
 
 CREATE TABLE PAZIENTE (
@@ -48,13 +48,13 @@ CREATE TABLE PAZIENTE (
     ind_civico VARCHAR(10),
 
     CONSTRAINT check_PKPAZIENTE PRIMARY KEY(codiceFiscale),
-    CONSTRAINT check_nome_not_empty CHECK(LENGTH(nome) > 0),
-    CONSTRAINT check_cognome_not_empty CHECK(LENGTH(cognome) > 0),
+    CONSTRAINT check_nome CHECK(LENGTH(nome) > 0),
+    CONSTRAINT check_cognome CHECK(LENGTH(cognome) > 0),
     CONSTRAINT check_dataNascita CHECK(dataNascita <= CURRENT_DATE),
-    CONSTRAINT check_ind_cap_positive CHECK(CAST(ind_cap AS UNSIGNED) >= 0),
-    CONSTRAINT check_ind_civico_positive CHECK(CAST(ind_civico AS UNSIGNED) >= 0),
-    CONSTRAINT check_ind_via_not_empty CHECK(LENGTH(ind_via) > 0),
-    CONSTRAINT check_ind_citta_not_empty CHECK(LENGTH(ind_citta) > 0),
+    CONSTRAINT check_ind_cap CHECK(CAST(ind_cap AS UNSIGNED) >= 0),
+    CONSTRAINT check_ind_civico CHECK(CAST(ind_civico AS UNSIGNED) >= 0),
+    CONSTRAINT check_ind_via CHECK(LENGTH(ind_via) > 0),
+    CONSTRAINT check_ind_citta CHECK(LENGTH(ind_citta) > 0),
 );
 
 CREATE TABLE STORICO (
@@ -104,8 +104,8 @@ CREATE TABLE PRENOTAZIONE (
         ON UPDATE CASCADE,
     CONSTRAINT check_ora_inizio_pren CHECK(oraInizio BETWEEN 0 AND 23),
     CONSTRAINT check_ora_fine_pren CHECK(oraFine BETWEEN 0 AND 23),
-    CONSTRAINT check_codicePrenotazione_positive CHECK(codicePrenotazione > 0),
-    CONSTRAINT check_tipoVisita_not_empty CHECK(LENGTH(tipoVisita) > 0)
+    CONSTRAINT check_codicePrenotazione CHECK(codicePrenotazione > 0),
+    CONSTRAINT check_tipoVisita CHECK(LENGTH(tipoVisita) > 0)
 );
 
 CREATE TABLE MEDICO (
@@ -115,7 +115,7 @@ CREATE TABLE MEDICO (
     codiceFiscale VARCHAR(16) UNIQUE,
     nome VARCHAR(50),
     cognome VARCHAR(50),
-    primario BOOLEAN,
+    primario BINARY,
     FOREIGN KEY (codiceReparto) REFERENCES REPARTO(codiceReparto),
 
     CONSTRAINT check_PKMedico PRIMARY KEY(codiceMedico),
@@ -123,9 +123,9 @@ CREATE TABLE MEDICO (
         REFERENCES REPARTO(codiceReparto)
         ON DELETE CASCADE
         ON UPDATE CASCADE,
-    CONSTRAINT check_codiceMedico_not_empty CHECK(LENGTH(codiceMedico) > 0),
-    CONSTRAINT check_nomeMedico_not_empty CHECK(LENGTH(nome) > 0),
-    CONSTRAINT check_cognomeMedico_not_empty CHECK(LENGTH(cognome) > 0)
+    CONSTRAINT check_codiceMedico CHECK(LENGTH(codiceMedico) > 0),
+    CONSTRAINT check_nomeMedico CHECK(LENGTH(nome) > 0),
+    CONSTRAINT check_cognomeMedico CHECK(LENGTH(cognome) > 0)
 );
 
 CREATE TABLE REPARTO (
@@ -133,8 +133,8 @@ CREATE TABLE REPARTO (
     nomeReparto VARCHAR(50),
 
     CONSTRAINT check_PKReparto PRIMARY KEY(codiceReparto),
-    CONSTRAINT check_codiceReparto_positive CHECK(codiceReparto > 0),
-    CONSTRAINT check_nomeReparto_not_empty CHECK(LENGTH(nomeReparto) > 0)
+    CONSTRAINT check_codiceReparto CHECK(codiceReparto > 0),
+    CONSTRAINT check_nomeReparto CHECK(LENGTH(nomeReparto) > 0)
 );
 
 CREATE TABLE AMBULATORIO (
@@ -148,8 +148,8 @@ CREATE TABLE AMBULATORIO (
         REFERENCES REPARTO(codiceReparto)
         ON DELETE CASCADE
         ON UPDATE CASCADE,
-    CONSTRAINT check_codiceAmbulatorio_positive CHECK(codiceAmbulatorio > 0),
-    CONSTRAINT check_piano_positive CHECK(piano >= 0)
+    CONSTRAINT check_codiceAmbulatorio CHECK(codiceAmbulatorio > 0),
+    CONSTRAINT check_piano CHECK(piano >= 0)
 );
 
 CREATE TABLE ESAME (
@@ -170,7 +170,7 @@ CREATE TABLE ESAME (
         REFERENCES MEDICO(codiceMedico)
         ON DELETE CASCADE
         ON UPDATE CASCADE,
-    CONSTRAINT check_codiceEsame_positive CHECK(codiceEsame > 0)
+    CONSTRAINT check_codiceEsame CHECK(codiceEsame > 0)
 );
 
 CREATE TABLE ORARIOLAVORO (
@@ -182,7 +182,7 @@ CREATE TABLE ORARIOLAVORO (
     CONSTRAINT check_PKOrario PRIMARY KEY(giorno, oraInizio),
     CONSTRAINT check_oraInizio CHECK(oraInizio BETWEEN 0 AND 23),
     CONSTRAINT check_oraFine CHECK(oraFine BETWEEN 0 AND 23),
-    CONSTRAINT check_giorno_valid CHECK(giorno IN ('L','M','Me','G','V','S','D'))
+    CONSTRAINT check_giorno CHECK(giorno IN ('L','M','Me','G','V','S','D'))
 );
 
 CREATE TABLE SPECIALIZZAZIONE (
@@ -200,8 +200,8 @@ CREATE TABLE SPECIALIZZAZIONE (
         ON DELETE CASCADE
         ON UPDATE CASCADE,
     CONSTRAINT check_voto CHECK(votoConseguimento >= 0 AND votoConseguimento <= 110),
-    CONSTRAINT check_tipo_not_empty CHECK(LENGTH(tipo) > 0),
-    CONSTRAINT check_titolo_not_empty CHECK(LENGTH(titolo) > 0)
+    CONSTRAINT check_tipo CHECK(LENGTH(tipo) > 0),
+    CONSTRAINT check_titolo CHECK(LENGTH(titolo) > 0)
 );
 
 CREATE TABLE MEDICO_ORARIOLAVORO (

@@ -1,8 +1,7 @@
 PNDOC:
-pandoc relazione..md -o relazione.pdf --pdf-engine=xelatex
+pandoc README.md -o relazione.pdf --pdf-engine=xelatex
 
 GITHUB:
 git add .
 git commit -m "nomeSalvataggio" -> io ho scelto: gg/mm/aa hh:mm
 git push
-
