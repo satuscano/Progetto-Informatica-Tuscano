@@ -39,7 +39,7 @@ Il sistema prevede un database per la gestione di un centro polispecialistico. F
 ## Diagramma Entità-Relazione (E-R)
 <!-- ||--o // }|--o -->
 
-```Mermaid
+```mermaid
     erDiagram
         FATTURA o|--|| PAGAMENTO : riferisce
         PAGAMENTO ||--o{ PAZIENTE : paga
