@@ -1,11 +1,12 @@
 <html>
     <head>
+        <title>Orari Lavoro Ambulatorio</title>
     </head>
     <body>
         <h1>Orari di Lavoro</h1>
         <form method="GET" action="#">
-            <label for="Giorno">Giorno:</label>
-            <select name="Giorno">
+            <label for="giorno">giorno:</label>
+            <select name="giorno">
             <option value="">Tutti</option>
             <?php
                 try {
@@ -14,27 +15,28 @@
 
                     // query: seleziono tutti gli orari e li salvo
                     $sql = "SELECT * FROM orari";
-                    $sqlGiorni = "SELECT DISTINCT Giorno FROM orari";
+                    $sqlGiorni = "SELECT DISTINCT giorno FROM orari";
                     $resGiorni = $conn->query($sqlGiorni);
                     $resGiorni = $resGiorni->fetchAll(PDO::FETCH_ASSOC);
 
                     // serve per filtrare in base al giorno selezionato
-                    if(isset($_GET["Giorno"])) {
-                        $giorno = $_GET["Giorno"] != "< Tutti >";
-                        $sql .= " WHERE Giorno = '".$giorno."'";
+                    if(isset($_GET["giorno"])) {
+                        $giorno = $_GET["giorno"];
+                            if($giorno != "")
+                                $sql .= " WHERE giorno = '".$giorno."'";
                     }
                     
                     // riempio la tendina dei giorni automaticamente
                     foreach($resGiorni as $g) {
-                        echo "<option value='".$g["Giorno"]."'";
-                        if(isset($_GET["Giorno"]) && $_GET["Giorno"] == $g["Giorno"])
+                        echo "<option value='".$g["giorno"]."'";
+                        if(isset($_GET["giorno"]) && $_GET["giorno"] == $g["giorno"])
                             echo " selected";
-                        echo ">".$g["Giorno"]."</option>";
+                        echo ">".$g["giorno"]."</option>";
                     }
 
                     $results = $conn->query($sql);
                     $nOrari = $results->rowCount();
-                    if($nOrari > 0)
+                    if($nOrari == 0)
                         echo "<h2>Nessun orario trovato</h2>";
                     else if($nOrari == 1)
                         echo "<h2>Trovato un solo orario</h2>";
@@ -44,7 +46,7 @@
                     if($nOrari > 0) {
                         echo "<table border='1'>
                                 <tr>
-                                    <th>Giorno</th>
+                                    <th>giorno</th>
                                     <th>Inizio turno</th>
                                     <th>Fine turno</th>
                                 </tr>";
