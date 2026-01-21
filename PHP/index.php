@@ -4,12 +4,8 @@
 </head>
 <body>
     <h1>Orari di Lavoro</h1>
-    <form method="GET" action="#">
-        <label for="giorno">Giorno:</label>
-        <select name="giorno">
-            <option value="">Tutti</option>
-            <?php
-            try {
+    <?php
+        try {
                 // nome del server - sempre "localhost"
                 $servername = "localhost";
                 // il nome del database che vuoi utilizzare
@@ -19,19 +15,41 @@
                 $password = "";
 
                 // creo un nuovo oggetto PDO (connessione)
-                $conn = new PDO("mysql:host=$servername;dbname=$dbname", $username, $password);
+                // $conn = new PDO("mysql:host=$servername;dbname=$dbname", $username, $password);
+                $conn = new PDO(
+                    "mysql:host=127.0.0.1;dbname=databaseprogetto;charset=utf8",
+                    "root",
+                    "",
+                    [PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION]
+                );
+
                 // setto la modalità di errori del PDO come exception
                 $conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION); // conn.setAttribute()
 
                 // Prendo i giorni disponibili dai medici
                 $sqlGiorni = "SELECT DISTINCT giorno FROM medico_orariolavoro ORDER BY giorno";
                 $resGiorni = $conn->query($sqlGiorni)->fetchAll(PDO::FETCH_ASSOC);
+        } catch (PDOException $e) {
+            echo "<h2 style='color:red; font-weight:bold'>".$e->getMessage()."</h2>";
+        }
+    ?>
 
+    <form method="GET" action="#">
+        <label for="giorno">Giorno:</label>
+        <select name="giorno">
+            <option value="">Tutti</option>
+            <?php
+                echo "ciao";
                 foreach($resGiorni as $g) {
                     $selected = (isset($_GET["giorno"]) && $_GET["giorno"] == $g["giorno"]) ? " selected" : "";
                     echo "<option value='".$g["giorno"]."'$selected>".$g["giorno"]."</option>";
                 }
+            ?>
+        </select>
+        <input type="submit" value="Filtra">
+    </form>
 
+            <?php
                 // Query principale: join con ORARIOLAVORO per avere oraFine
                 $sql = "SELECT m.giorno, m.oraInizio, o.oraFine
                         FROM medico_orariolavoro m
@@ -69,13 +87,6 @@
                     }
                     echo "</table>";
                 }
-
-            } catch(PDOException $e) {
-                echo "<h2 style='color:red; font-weight:bold'>".$e->getMessage()."</h2>";
-            }
             ?>
-        </select>
-        <input type="submit" value="Invia"/>
-    </form>
 </body>
 </html>
