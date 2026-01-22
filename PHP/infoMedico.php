@@ -8,7 +8,7 @@ $codiceMedico = $_GET['codice'];
 
 try {
     $conn = new PDO(
-        "mysql:host=127.0.0.1;dbname=databaseprogetto;charset=utf8",
+        "mysql:host=127.0.0.1;dbname=databaseprogetto2;charset=utf8",
         "root",
         "",
         [PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION]
@@ -37,7 +37,7 @@ try {
 
 <html>
 <head>
-    <title><?= $medico['nome']." ".$medico['cognome'] ?></title>
+    <title>Medico - <?= $medico['nome']." ".$medico['cognome'] ?></title>
     <style>
         body { font-family: Arial, sans-serif; background-color: #f0f8ff; padding: 20px; }
         h1 { color: #0077b6; }

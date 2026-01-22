@@ -1,7 +1,8 @@
 <html>
 <head>
-    <title>Orari Lavoro Medici Ambulatorio A</title>
+    <title>Orari Lavoro Medici</title>
     <style>
+        h1 { color: #0077b6; }
         table { border-collapse: collapse; margin-bottom: 20px; width: 80%; }
         th, td { border: 0.5px solid black; padding: 5px 10px; }
         th { background-color: #bee1ff; }
@@ -20,10 +21,10 @@
     <?php
     try {
         $conn = new PDO(
-            "mysql:host=127.0.0.1;dbname=databaseprogetto;charset=utf8",
-            "root",
-            "",
-            [PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION]
+        "mysql:host=127.0.0.1;dbname=databaseprogetto2;charset=utf8",
+        "root",
+        "",
+        [PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION]
         );
 
         $giorniSettimana = [

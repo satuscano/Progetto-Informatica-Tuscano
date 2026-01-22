@@ -58,6 +58,7 @@ CREATE TABLE ESAME (
     codiceEsame INT PRIMARY KEY,
     codiceAmbulatorio INT NOT NULL,
     codiceMedico VARCHAR(10) NOT NULL,
+    codiceFiscale VARCHAR(16) NOT NULL,
     diagnosi TEXT,
     referto TEXT,
 
@@ -70,6 +71,12 @@ CREATE TABLE ESAME (
     CONSTRAINT fk_esame_medico
         FOREIGN KEY (codiceMedico)
         REFERENCES MEDICO(codiceMedico)
+        ON DELETE CASCADE
+        ON UPDATE CASCADE,
+
+    CONSTRAINT fk_esame_codiceFiscale
+        FOREIGN KEY (codiceFiscale)
+        REFERENCES PAZIENTE(codiceFiscale)
         ON DELETE CASCADE
         ON UPDATE CASCADE,
 
@@ -114,10 +121,10 @@ CREATE TABLE STORICO (
     codiceEsame INT,
     data DATE,
     oraInizio INT,
-    oraFine INT,
-    codiceFiscale VARCHAR(16),
-    diagnosi TEXT,
-    prescrizione TEXT,
+    oraFine INT NULL,
+    codiceFiscale VARCHAR(16) NOT NULL,
+    diagnosi TEXT NULL,
+    prescrizione TEXT NULL,
 
     PRIMARY KEY (codiceEsame, data, oraInizio),
 
