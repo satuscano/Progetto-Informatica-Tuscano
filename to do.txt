@@ -1,0 +1,5 @@
+fare cartelle php (?)
+fare file css
+    vedi home page per stile h1
+fare gui (riquadri, icone ecc)
+js (?)

@@ -1,9 +1,16 @@
 <html>
     <head>
         <title>Home Page</title>
+        <style>
+            h1 {
+                color: #0077b6; 
+                text-align: center;
+                font-family: system-ui;
+            }
+        </style>
     </head>
     <body style="background-color:#f0f8ff">
-        <h1 style="color: #0077b6;">AMBULATORIO A. TUSCANO</h1>
+        <h1>AMBULATORIO A. TUSCANO</h1>
 
         <?php
             try{
