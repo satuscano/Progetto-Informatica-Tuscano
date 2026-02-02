@@ -1,19 +1,10 @@
 <html>
     <head>
+        <link rel="stylesheet" href="css/style.css">
         <title>Elenco Medici</title>
-        <style>
-            h1 { color: #0077b6; }
-            table { border-collapse: collapse; margin-bottom: 20px; width: 80%; }
-            th, td { border: 0.5px solid black; padding: 5px 10px; }
-            th { background-color: #bee1ff; }
-            .primario {
-                font-weight: bold;
-                color: darkblue;
-            }
-        </style>
     </head>
 
-    <body style="background-color:#f0f8ff">
+    <body>
         <h1>Elenco Medici Ambulatorio</h1>
 
         <form method="get">
@@ -27,12 +18,7 @@
 
         <?php
             try {
-                $conn = new PDO(
-                    "mysql:host=127.0.0.1;dbname=databaseprogetto2;charset=utf8",
-                    "root",
-                    "",
-                    [PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION]
-                );
+                include("inc/startConn.inc");
 
                 $soloPrimari = isset($_GET['soloPrimari']);
 
@@ -66,6 +52,8 @@
                               </tr>";
                     }
                     echo "</table>";
+
+                    include("inc/backBTN.inc");
                 }
             } catch (PDOException $e) {
                 echo "<h2 style='color:red;'>Errore DB: {$e->getMessage()}</h2>";

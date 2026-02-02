@@ -1,5 +1,5 @@
-fare cartelle php (?)
 fare file css
     vedi home page per stile h1
+magari mettere in include new PDO
 fare gui (riquadri, icone ecc)
 js (?)

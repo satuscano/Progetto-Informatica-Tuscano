@@ -1,32 +1,36 @@
 <html>
     <head>
-        <title>Home Page</title>
-        <style>
-            h1 {
-                color: #0077b6; 
-                text-align: center;
-                font-family: system-ui;
-            }
-        </style>
+        <link rel="stylesheet" href="css/style.css">
+        <title>🏠Home Page</title>
     </head>
-    <body style="background-color:#f0f8ff">
-        <h1>AMBULATORIO A. TUSCANO</h1>
-
+    <body>
         <?php
             try{
-                $conn = new PDO(
-                    "mysql:host=127.0.0.1;dbname=databaseprogetto2;charset=utf8",
-                    "root",
-                    "",
-                    [PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION]
-                );
+                include("inc/startConn.inc");              
 
-                echo "<p><i>Cliccare sull'opzione desiderata:</i></p>";
+                echo '<h1>AMBULATORIO A. TUSCANO</h1>
 
-                echo '<a href="index.orariMedici.php" target="_blank">Orari dei medici</a><p></p>'; // orari medici
-                echo '<a href="index.elencoMedici.php" target="_blank">Elenco dei medici</a><p></p>'; // elenco medici /ordine alfabetico)
-                echo '<a href="index.elencoPazienti.php" target="_blank">Elenco dei pazienti</a><p></p>'; // elenco pazienti
-                echo '<a href="index.elencoEsami.php" target="_blank">Elenco degli esami dei pazienti</a>'; // elenco esami (solo esami da eseguire)
+                <div class="menu">
+                    <a class="card" href="index.elencoMedici.php">
+                        <h2>Medici</h2>
+                        <p>Visualizza l elenco dei medici</p>
+                    </a>
+
+                    <a class="card" href="index.elencoPazienti.php">
+                        <h2>Pazienti</h2>
+                        <p>Gestione pazienti e dati anagrafici</p>
+                    </a>
+
+                    <a class="card" href="index.orariMedici.php">
+                        <h2>Orari</h2>
+                        <p>Orari di lavoro dei medici</p>
+                    </a>
+
+                    <a class="card" href="index.elencoEsami.php">
+                        <h2>Esami</h2>
+                        <p>Esami e storico clinico</p>
+                    </a>
+                </div>';
             } catch(PDOException $e) {
                 echo "<h2 style='color:red;'>Errore DB: ".$e->getMessage()."</h2>";
                 exit;
