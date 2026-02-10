@@ -1,6 +1,14 @@
 body {
-    background: linear-gradient(rgba(255,255,255,0.6), rgba(255,255,255,0.6)),
+    background-color: #e1f1ff;
+}
+
+body.login_page {
+    background: linear-gradient(
+        rgba(255,255,255,0.6),
+        rgba(255,255,255,0.6)
+    ),
     url('../img/medicalLogo.png') no-repeat center center fixed;
+
     background-size: cover;
     font-family: Arial, sans-serif;
     margin: 0;
@@ -27,6 +35,22 @@ h2 {
     font-size: 24px;
     margin-top: 0;
     margin-bottom: 25px;
+}
+
+.top-bar {
+    width: 97%;
+    height: 70px;
+    background-color: #0077b6;
+    display: flex;
+    align-items: center;
+    padding: 0 30px;
+    box-shadow: 0 3px 10px rgba(0,0,0,0.2);
+}
+
+.top-bar h1 {
+    color: white;
+    font-size: 22px;
+    margin: 0;
 }
 
 .wrapper {
@@ -94,4 +118,24 @@ h2 {
     margin-bottom: 15px;
     text-align: center;
     font-weight: bold;
+}
+
+.card {
+    background: #fff;
+    padding: 20px;
+    border-radius: 12px;
+    box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+    margin-top: 20px;
+    transition: transform 0.25s ease, box-shadow 0.25s ease;
+}
+
+.card:hover {
+    transform: scale(1.01);
+    box-shadow: 0 10px 25px rgba(0,0,0,0.25);
+}
+
+.chart-wrapper {
+    max-width: 800px;
+    height: 400px;
+    margin: 0 auto;
 }

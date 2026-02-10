@@ -3,7 +3,7 @@
         <title>WELCOME - LOGIN</title>
         <link rel="stylesheet" href="CSS/theme.css">
     </head>
-    <body> 
+    <body class="login_page"> 
         <div class="wrapper">
             
         <div class="login-container">
@@ -41,7 +41,7 @@
                                 header("Location: areaMedici/dashboard.php");
                                 break;
                             case 'admin':
-                                header("Location: /PROGETTO-INFO/areaAdmin/dashboard.php");
+                                header("Location: areaAdmin/dashboard.php");
                                 break;
                         }
                         exit;
