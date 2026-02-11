@@ -38,13 +38,12 @@ h2 {
 }
 
 .top-bar {
-    width: 97%;
-    height: 70px;
-    background-color: #0077b6;
     display: flex;
     align-items: center;
-    padding: 0 30px;
-    box-shadow: 0 3px 10px rgba(0,0,0,0.2);
+    gap: 15px;
+    background: #0077b6;
+    color: white;
+    padding: 15px 20px;
 }
 
 .top-bar h1 {
@@ -138,4 +137,70 @@ h2 {
     max-width: 800px;
     height: 400px;
     margin: 0 auto;
+}
+
+.top-nav {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 15px 20px;
+    background: #1e1e2f;
+    color: white;
+}
+
+.hamburger {
+    font-size: 26px;
+    background: none;
+    border: none;
+    color: white;
+    cursor: pointer;
+}
+
+.hamburger:hover {
+    opacity: 0.7;
+}
+
+.side-menu {
+    position: fixed;
+    top: 60px;
+    left: 0;
+    width: 260px;
+    height: 100%;
+    background: #2b2b3c;
+    padding: 20px;
+    transform: translateX(-100%);
+    transition: transform 0.3s ease;
+    z-index: 1000;
+}
+
+.side-menu ul {
+    list-style: none;
+    padding: 0;
+}
+
+.side-menu li {
+    margin: 12px 0;
+}
+
+.side-menu a {
+    color: white;
+    text-decoration: none;
+}
+
+.side-menu a:hover {
+    text-decoration: underline;
+}
+
+.side-menu .section {
+    margin-top: 20px;
+    font-weight: bold;
+    color: #aaa;
+}
+
+.side-menu:not(.hidden) {
+    transform: translateX(0);
+}
+
+.hidden {
+    display: none;
 }
