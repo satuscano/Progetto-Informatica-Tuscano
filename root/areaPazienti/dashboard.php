@@ -9,19 +9,16 @@ if($conn->connect_error){ die("Connessione fallita: ".$conn->connect_error); }
 
 $cf = $_SESSION['codiceFiscale'];
 
-// Totale esami
 $stmt = $conn->prepare("SELECT COUNT(*) as totaleEsami FROM storico WHERE codiceFiscale = ?");
 $stmt->bind_param("s", $cf);
 $stmt->execute();
 $totaleEsami = $stmt->get_result()->fetch_assoc()['totaleEsami'];
 
-// Ultimo esame
 $stmt2 = $conn->prepare("SELECT diagnosi, data FROM storico WHERE codiceFiscale = ? ORDER BY data DESC LIMIT 1");
 $stmt2->bind_param("s", $cf);
 $stmt2->execute();
 $ultimoEsame = $stmt2->get_result()->fetch_assoc();
 
-// Conteggio esami per reparto
 $reparti = $conn->query("SELECT nomeReparto FROM reparto")->fetch_all(MYSQLI_ASSOC);
 $reparti = array_column($reparti, 'nomeReparto');
 $conteggi = [];
@@ -39,7 +36,6 @@ foreach($reparti as $rep){
     $conteggi[] = $res['tot'];
 }
 
-// Info paziente completa
 $stmtInfo = $conn->prepare("
     SELECT nome, cognome, dataNascita, ind_citta, ind_via, ind_civico, ind_cap 
     FROM paziente 
@@ -49,7 +45,6 @@ $stmtInfo->bind_param("s", $cf);
 $stmtInfo->execute();
 $paziente = $stmtInfo->get_result()->fetch_assoc();
 
-// Pagamenti
 $stmtPag = $conn->prepare("
     SELECT codicePagamento, dataPagamento, somma, metodo 
     FROM pagamento 
@@ -78,6 +73,10 @@ $pagamenti = $stmtPag->get_result();
         </style>
     </head>
     <body>
+        <?php require_once("../components/menuPaziente.php"); ?>
+        <div id="overlay" onclick="toggleMenu()"></div>
+        <div id="mainContent"></div>
+
         <header class="top-bar">
             <button class="hamburger" onclick="toggleMenu()">☰</button>
             <h1>Benvenuto, <?= $paziente['nome'] ?></h1>
@@ -189,7 +188,8 @@ $pagamenti = $stmtPag->get_result();
                 }
             });
         </script>
-        <script src="../js/menu.js"></script>
+        </body>
+        <script src="../js/menu.js" defer></script>
     </body>
 </html>
 

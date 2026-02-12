@@ -144,63 +144,111 @@ h2 {
     justify-content: space-between;
     align-items: center;
     padding: 15px 20px;
-    background: #1e1e2f;
+    background: #0077b6;
     color: white;
 }
 
+.side-menu {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 260px;
+    height: 100%;
+    background: #0077b6;
+    padding: 80px 20px 20px 20px;
+    transform: translateX(-100%);
+    transition: transform 0.35s ease;
+    z-index: 1001;
+}
+
+.main-content {
+    transition: transform 0.35s ease;
+}
+
+.top-bar {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    background: #0077b6;
+    color: white;
+    padding: 15px 20px;
+}
+
 .hamburger {
-    font-size: 26px;
+    font-size: 24px;
     background: none;
     border: none;
     color: white;
     cursor: pointer;
 }
 
-.hamburger:hover {
-    opacity: 0.7;
-}
-
-.side-menu {
+#overlay {
     position: fixed;
-    top: 60px;
-    left: 0;
-    width: 260px;
-    height: 100%;
-    background: #2b2b3c;
-    padding: 20px;
-    transform: translateX(-100%);
-    transition: transform 0.3s ease;
+    inset: 0;
+    background: rgba(0,0,0,0.4);
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.3s ease;
     z-index: 1000;
 }
 
-.side-menu ul {
-    list-style: none;
-    padding: 0;
-}
-
-.side-menu li {
-    margin: 12px 0;
-}
-
-.side-menu a {
-    color: white;
-    text-decoration: none;
-}
-
-.side-menu a:hover {
-    text-decoration: underline;
-}
-
-.side-menu .section {
-    margin-top: 20px;
-    font-weight: bold;
-    color: #aaa;
-}
-
-.side-menu:not(.hidden) {
+.menu-open .side-menu {
     transform: translateX(0);
+}
+
+.menu-open #mainContent {
+    transform: translateX(260px);
+}
+
+.menu-open #overlay {
+    opacity: 1;
+    visibility: visible;
+}
+
+.menu-item a {
+    color: #313131
+}
+
+.section p {
+    font-weight: bold;
+}
+
+.profile-container {
+    padding: 30px;
+}
+
+.card {
+    background: #ffffff;
+    padding: 20px;
+    margin-bottom: 20px;
+    border-radius: 10px;
+    color: #000000;
+}
+
+.card h2 {
+    margin-bottom: 15px;
+}
+
+.edit-form {
+    margin-top: 10px;
 }
 
 .hidden {
     display: none;
+}
+
+button {
+    background: #4e73df;
+    border: none;
+    padding: 8px 15px;
+    color: white;
+    border-radius: 6px;
+    cursor: pointer;
+}
+
+.form-label {
+    display: inline-block;
+    width: 120px;
+    margin-right: 10px;
+    font-weight: bold;
 }
