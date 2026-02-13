@@ -109,3 +109,7 @@ if($_SERVER['REQUEST_METHOD'] === 'POST'){
         <script src="../js/menu.js" defer></script>
     </body>
 </html>
+
+<?php
+    $conn->close();
+?>

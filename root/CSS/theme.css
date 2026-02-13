@@ -119,6 +119,13 @@ h2 {
     font-weight: bold;
 }
 
+.error-msg p {
+    color: red;
+    margin-bottom: 15px;
+    text-align: center;
+    font-weight: bold;
+}
+
 .card {
     background: #fff;
     padding: 20px;

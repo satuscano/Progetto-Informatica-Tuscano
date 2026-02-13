@@ -62,15 +62,6 @@ $pagamenti = $stmtPag->get_result();
         <title>Dashboard Paziente</title>
         <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
         <link rel="stylesheet" href="../CSS/theme.css">
-        <style>
-            body { font-family: Arial, sans-serif; background: #f5f5f5; }
-            .card { background: #fff; padding: 20px; margin: 10px 0; border-radius: 12px; box-shadow: 0 5px 20px rgba(0,0,0,0.1); }
-            .stats { display: flex; gap: 20px; flex-wrap: wrap; }
-            .stat-card { flex: 1; min-width: 150px; text-align: center; }
-            ul { padding-left: 20px; }
-            a { color: #007bff; text-decoration: none; }
-            a:hover { text-decoration: underline; }
-        </style>
     </head>
     <body>
         <?php require_once("../components/menuPaziente.php"); ?>
