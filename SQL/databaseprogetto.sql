@@ -16,6 +16,14 @@ CREATE TABLE `esame` (
   `referto` text DEFAULT NULL
 );
 
+-- dump di esame per testare il cancella
+INSERT INTO `esame` (`codiceEsame`, `codiceAmbulatorio`, `codiceMedico`, `codiceFiscale`, `diagnosi`, `referto`) VALUES
+(204, 103, 'MED001', 'CNTLRA88E22H501B', 'Diagnosi di esempio', 'Referto di esempio');
+
+-- dump di storico correlato all'esame per testare il cancella
+INSERT INTO `storico` (`codiceEsame`, `data`, `oraInizio`, `oraFine`, `codiceFiscale`, `diagnosi`, `prescrizione`) VALUES
+(204, '2024-01-15', 9, 10, 'CNTLRA88E22H501B', 'Diagnosi di esempio', 'Prescrizione di esempio');
+
 CREATE TABLE `fattura` (
   `codiceFattura` int(11) NOT NULL,
   `codicePagamento` int(11) NOT NULL

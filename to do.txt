@@ -1,1 +1,1 @@
-fare bottoni modifica e cancella in esamiPrenotati.php
+ in esamiPrenotati.php

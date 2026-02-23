@@ -28,8 +28,8 @@ $stmtEsami = $conn->prepare("
     esame.diagnosi,
     esame.referto
     FROM esame
-    JOIN medico ON esame.codiceMedico = medico.codiceMedico
-    JOIN storico ON esame.codiceEsame = storico.codiceEsame
+    LEFT JOIN medico ON esame.codiceMedico = medico.codiceMedico
+    LEFT JOIN storico ON esame.codiceEsame = storico.codiceEsame
     WHERE esame.codiceFiscale = ?
 ");
 $stmtEsami->bind_param("s", $cf);
@@ -55,22 +55,43 @@ $numeroEsami = $esamiPrenotati->num_rows;
             <h1>Esami Prenotati da <?= $paziente['nome'] ?></h1>
         </header>
 
-        <div class="card">
+        
             <?php if($numeroEsami > 0): ?>
                 <ul>
                     <?php while($esame = $esamiPrenotati->fetch_assoc()): ?>
-                        <li>
-                            <strong>Codice Esame: <?= $esame['codiceEsame'] ?></strong><br>
-                            Ambulatorio: <?= $esame['ambulatorio'] ?><br>
-                            Data esame: <?= date("d/m/Y", strtotime($esame['dataPrenotazione'])) ?><br>
-                            Ora inizio: <?= sprintf("%02d:00", $esame['oraInizio']) ?><br>
-                            Medico: <?= $esame['medico'] ?><br>
-                            Diagnosi: <?= $esame['diagnosi'] ?: 'Non disponibile' ?><br>
-                            Referto: <?= $esame['referto'] ?: 'Non disponibile' ?> <br><br>
+                        <div class="card">
+                        <strong>Codice Esame: <?= $esame['codiceEsame'] ?></strong><br>
+                        Ambulatorio: <?= $esame['ambulatorio'] ?: 'Non disponibile' ?><br>
+                        Data esame: <?php if(!empty($esame['dataPrenotazione'])) { echo date("d/m/Y", strtotime($esame['dataPrenotazione'])); } else { echo 'Non prenotato'; } ?><br>
+                        Ora inizio: <?php if(isset($esame['oraInizio']) && $esame['oraInizio'] !== null) { echo sprintf("%02d:00", $esame['oraInizio']); } else { echo 'Non disponibile'; } ?><br>
+                        Medico: <?= $esame['medico'] ?: 'Non disponibile' ?><br>
+                        Diagnosi: <?= $esame['diagnosi'] ?: 'Non disponibile' ?><br>
+                        Referto: <?= $esame['referto'] ?: 'Non disponibile' ?> <br><br>
 
-                            <button onclick="toggleEdit('formModifica')">Modifica</button>
-                            <button onclick="toggleEdit('formCancella')">Cancella</button>
-                        </li>
+                        <?php if(!empty($esame['dataPrenotazione'])): ?>
+                            <button onclick="toggleEdit('formModifica_<?= $esame['codiceEsame'] ?>')">Modifica</button>
+                            <button onclick="toggleEdit('formCancella_<?= $esame['codiceEsame'] ?>')">Cancella</button>
+
+                            <form id="formModifica_<?= $esame['codiceEsame'] ?>" class="hidden" method="POST" action="modificaPrenotazione.php">
+                                <input type="hidden" name="codiceEsame" value="<?= $esame['codiceEsame'] ?>">
+                                <label for="data">Nuova data:</label>
+                                <input type="date" name="data" required>
+                                <label for="ora">Nuova ora:</label>
+                                <input type="time" name="ora" required>
+                                <button type="submit">Salva modifiche</button>
+                            </form>
+
+                            <form id="formCancella_<?= $esame['codiceEsame'] ?>" class="hidden" method="POST" action="annullaPrenotazione.php">
+                                <input type="hidden" name="codiceEsame" value="<?= $esame['codiceEsame'] ?>">
+                                <input type="hidden" name="data" value="<?= $esame['dataPrenotazione'] ?>">
+                                <input type="hidden" name="oraInizio" value="<?= $esame['oraInizio'] ?>">
+                                <br>
+                                <button type="submit">Conferma cancellazione</button>
+                            </form>
+                        <?php else: ?>
+                            <em>Nessuna prenotazione associata a questo esame</em>
+                        <?php endif; ?>
+                        </div>
                     <?php endwhile; ?>
                 </ul>
             <?php else: ?>
