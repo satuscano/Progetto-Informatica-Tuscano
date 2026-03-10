@@ -1,6 +1,5 @@
 <?php
-require_once("../auth.php");
-requireRole('paziente');
+include("../inc/start.inc");
 
 // Questo script gestisce la cancellazione di una prenotazione esame da parte del paziente.
 if ($_SERVER['REQUEST_METHOD'] !== 'POST') {

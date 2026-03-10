@@ -11,9 +11,7 @@
 
                 <p class="section">PRENOTAZIONI</p>
                 <li class="menu-item"><a href="esamiPrenotati.php">Esami prenotati</a></li>
-                <li class="menu-item"><a href="prenota.php">Prenota esame</a></li>
-                <li class="menu-item"><a href="modificaPrenotazione.php">Modifica prenotazione</a></li>
-                <li class="menu-item"><a href="annullaPrenotazione.php">Annulla prenotazione</a></li>
+                <li class="menu-item"><a href="prenotaEsame.php">Prenota esame</a></li>
 
                 <p class="section">STORICO</p>
                 <li class="menu-item"><a href="storico.php">Visite effettuate</a></li>

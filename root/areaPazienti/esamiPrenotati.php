@@ -1,11 +1,5 @@
 <?php
-require_once("../auth.php");
-requireRole('paziente');
-require_once("../components/menuPaziente.php");
-
-
-$conn = new mysqli("localhost", "root", "", "databaseprogetto");
-if($conn->connect_error){ die("Connessione fallita: ".$conn->connect_error); }
+include("../inc/start.inc");
 
 $cf = $_SESSION['codiceFiscale'];
 
@@ -89,7 +83,7 @@ $numeroEsami = $esamiPrenotati->num_rows;
                                 <button type="submit">Conferma cancellazione</button>
                             </form>
                         <?php else: ?>
-                            <em>Nessuna prenotazione associata a questo esame</em>
+                            <p>Nessuna prenotazione associata a questo esame</p>
                         <?php endif; ?>
                         </div>
                     <?php endwhile; ?>

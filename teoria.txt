@@ -1,0 +1,17 @@
+COME AVVIENE LA REGISTRAZIONE CIFRATA DI UN UTENTE
+1. l'utente inserisce la password
+2. il client genera l'hash
+3. il server riceve l'hash tramite pacchetto HTTP
+4. il server genera il salt, una stringa di 64bit casuale
+5. il server genera l'hash del salt e lo divide in due parti
+6. la prima parte verrà aggiunta all'inizio della password, la seconda alla fine
+
+
+
+SCHEMA PROF.
+- frontend registrazione --> client
+- backend registrazione --> server
+- frontend login --> client
+- backend login --> server
+- sessione --> server + client (cookies)
+- proteggere pag --> server

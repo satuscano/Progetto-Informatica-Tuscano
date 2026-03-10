@@ -1,10 +1,5 @@
 <?php
-require_once("../auth.php");
-requireRole('paziente');
-require_once("../components/menuPaziente.php");
-
-$conn = new mysqli("localhost", "root", "", "databaseprogetto");
-if($conn->connect_error){ die("Connessione fallita: ".$conn->connect_error); }
+include("../inc/start.inc");
 
 $cf = $_SESSION['codiceFiscale'];
 
@@ -28,7 +23,6 @@ if($_SERVER['REQUEST_METHOD'] === 'POST'){
     $update->bind_param("ssssssss", $nome, $cognome, $dataNascita, $ind_cap, $ind_citta, $ind_via, $ind_civico, $cf);
 
     if($update->execute()){
-        $success = "Profilo aggiornato correttamente.";
         $paziente['nome'] = $nome;
         $paziente['cognome'] = $cognome;
         $paziente['dataNascita'] = $dataNascita;
@@ -58,7 +52,7 @@ if($_SERVER['REQUEST_METHOD'] === 'POST'){
         </header>
 
         <?php if($success): ?>
-            <div class="alert success"><?= $success ?></div>
+            <div class="error-msg"><?= $success ?></div>
         <?php endif; ?>
 
         <div class="profile-container">

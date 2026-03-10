@@ -1,12 +1,12 @@
 <?php
-require_once("../auth.php");
-requireRole('paziente');
+include("../inc/start.inc");
 
 if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
     header('Location: esamiPrenotati.php');
     exit;
 }
 
+// Recupera e valida i dati inviati dal form
 $codiceEsame = filter_input(INPUT_POST, 'codiceEsame', FILTER_VALIDATE_INT);
 $data = filter_input(INPUT_POST, 'data', FILTER_SANITIZE_STRING);
 $oraRaw = filter_input(INPUT_POST, 'ora', FILTER_SANITIZE_STRING);
@@ -17,7 +17,7 @@ if (!$codiceEsame || !$data || !$oraRaw) {
     exit;
 }
 
-// Convert time like "08:00" to integer hour 8
+// Estrai solo l'ora senza formato
 $oraParts = explode(':', $oraRaw);
 $oraInizio = intval($oraParts[0]);
 
@@ -44,7 +44,7 @@ if ($checkEsame->num_rows === 0) {
 }
 $checkEsame->close();
 
-// Proviamo ad aggiornare la riga in storico; se non esiste, la inseriamo
+// Proviamo ad aggiornare la riga in storico - se non esiste, la inseriamo
 $upd = $conn->prepare("UPDATE storico SET data = ?, oraInizio = ? WHERE codiceEsame = ? AND codiceFiscale = ?");
 $upd->bind_param("siss", $data, $oraInizio, $codiceEsame, $cf);
 $upd->execute();
