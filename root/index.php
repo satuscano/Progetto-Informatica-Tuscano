@@ -13,26 +13,30 @@
             <?php
             session_start();
 
-            $msg = "";
+            $msg = ""; // Variabile per messaggi di errore
 
-            if($_SERVER['REQUEST_METHOD'] == 'POST'){
-                $codiceFiscale = $_POST['codiceFiscale'];
-                $password = $_POST['password'];
+            if($_SERVER['REQUEST_METHOD'] == 'POST'){ // Se il form è stato inviato tramite POST
+                $codiceFiscale = $_POST['codiceFiscale']; // Prendo il codice fiscale inserito
+                $password = $_POST['password']; // Prendo la password inserita
 
                 $conn = new mysqli("localhost", "root", "", "databaseprogetto");
                 if($conn->connect_error) die("Connessione fallita: ".$conn->connect_error);
 
-                $stmt = $conn->prepare("SELECT ruolo, password FROM users WHERE codiceFiscale = ?");
+                $stmt = $conn->prepare("SELECT ruolo, password
+                                                FROM users
+                                                WHERE codiceFiscale = ?");
                 $stmt->bind_param("s", $codiceFiscale);
                 $stmt->execute();
                 $result = $stmt->get_result();
 
-                if($result->num_rows == 1){
+                if($result->num_rows == 1){ // Se esiste un utente con quel codice fiscale
                     $row = $result->fetch_assoc();
-                    if(password_verify($password, $row['password'])){
-                        $_SESSION['codiceFiscale'] = $codiceFiscale;
+                    if(password_verify($password, $row['password'])){ // Verifico la password
+                    // Setto le variabili di sessione    
+                    $_SESSION['codiceFiscale'] = $codiceFiscale;
                         $_SESSION['ruolo'] = $row['ruolo'];
                         
+                        // Reindirizzo alla dashboard in base al ruolo
                         switch ($_SESSION['ruolo']) {
                             case 'paziente':
                                 header("Location: areaPazienti/dashboard.php");
@@ -55,11 +59,13 @@
                 $conn->close();
             }
             ?>
-
+            
+            <!-- Stampo il messaggio di errore se necessario -->
             <?php if($msg != ""): ?>
                 <div class="error-msg"><?php echo $msg; ?></div>
             <?php endif; ?>
-
+            
+            <!-- Form di login -->
             <form method="POST">
                 <input type="text" name="codiceFiscale" placeholder="Username" required>
                 <input type="password" name="password" placeholder="Password" required>

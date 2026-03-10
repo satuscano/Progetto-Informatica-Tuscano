@@ -3,14 +3,17 @@ include("../inc/start.inc");
 
 $cf = $_SESSION['codiceFiscale'];
 
-$stmt = $conn->prepare("SELECT * FROM paziente WHERE codiceFiscale = ?");
+$stmt = $conn->prepare("SELECT *
+                                FROM paziente
+                                WHERE codiceFiscale = ?");
 $stmt->bind_param("s", $cf);
 $stmt->execute();
 $result = $stmt->get_result();
 $paziente = $result->fetch_assoc();
 
-$success = "";
-if($_SERVER['REQUEST_METHOD'] === 'POST'){
+$success = ""; // Variabile per messaggi di successo o errore
+
+if($_SERVER['REQUEST_METHOD'] === 'POST'){ // Richiesta tipo POST
     $nome = $_POST['nome'];
     $cognome = $_POST['cognome'];
     $dataNascita = $_POST['dataNascita'];
@@ -19,10 +22,13 @@ if($_SERVER['REQUEST_METHOD'] === 'POST'){
     $ind_via = $_POST['ind_via'];
     $ind_civico = $_POST['ind_civico'];
 
-    $update = $conn->prepare("UPDATE paziente SET nome=?, cognome=?, dataNascita=?, ind_cap=?, ind_citta=?, ind_via=?, ind_civico=? WHERE codiceFiscale=?");
+    // Aggiorno i dati del paziente
+    $update = $conn->prepare("UPDATE paziente
+                                        SET nome=?, cognome=?, dataNascita=?, ind_cap=?, ind_citta=?, ind_via=?, ind_civico=?
+                                        WHERE codiceFiscale=?");
     $update->bind_param("ssssssss", $nome, $cognome, $dataNascita, $ind_cap, $ind_citta, $ind_via, $ind_civico, $cf);
 
-    if($update->execute()){
+    if($update->execute()){ // Se l'aggiornamento è andato a buon fine, aggiorno i dati nella variabile $paziente per riflettere le modifiche
         $paziente['nome'] = $nome;
         $paziente['cognome'] = $cognome;
         $paziente['dataNascita'] = $dataNascita;
@@ -42,9 +48,10 @@ if($_SERVER['REQUEST_METHOD'] === 'POST'){
         <link rel="stylesheet" href="../CSS/theme.css">
     </head>
     <body>
-        <?php require_once("../components/menuPaziente.php"); ?>
-        <div id="overlay" onclick="toggleMenu()"></div>
-        <div id="mainContent"></div>
+        <!-- Richiamo il menu -->
+        <?php require_once("../components/menuPaziente.php"); /* La require once serve a includere il menu solo una volta */ ?>
+        <div id="overlay" onclick="toggleMenu()"></div> <!-- Overlay per chiudere il menu quando si clicca fuori -->
+        <div id="mainContent"></div> <!-- Contenuto principale, usato per spostare tutto quando si apre il menu -->
 
         <header class="top-bar">
             <button class="hamburger" onclick="toggleMenu()">☰</button>
@@ -66,6 +73,7 @@ if($_SERVER['REQUEST_METHOD'] === 'POST'){
                 <button onclick="toggleEdit('formAnagrafica')">Modifica</button>
             </div>
 
+            <!-- Form di modifica dati personali -->
             <div id="formAnagrafica" class="edit-form hidden">
                 <form method="POST" action="">
                     <p class="form-label">Nome:</p>

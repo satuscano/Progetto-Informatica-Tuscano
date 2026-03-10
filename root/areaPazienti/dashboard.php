@@ -3,33 +3,55 @@ include("../inc/start.inc");
 
 $cf = $_SESSION['codiceFiscale'];
 
-$stmt = $conn->prepare("SELECT COUNT(*) as totaleEsami FROM storico WHERE codiceFiscale = ?");
-$stmt->bind_param("s", $cf);
-$stmt->execute();
-$totaleEsami = $stmt->get_result()->fetch_assoc()['totaleEsami'];
+// Calcola il numero totale di esami effettuati dal paziente con codice fiscale $cf
+$stmt = $conn->prepare("SELECT COUNT(*) as totaleEsami
+                                FROM storico
+                                WHERE codiceFiscale = ?");
+$stmt->bind_param("s", $cf); // Dove la query trova '?' sostituisci con il valore di $cf (codice fiscale del paziente, s -> stringa)
+$stmt->execute(); // Esegui la query
+$totaleEsami = $stmt->get_result()->fetch_assoc()['totaleEsami']; // Dal risultato della query, crea un array associativo e prendi il valore della chiave 'totaleEsami'
 
-$stmt2 = $conn->prepare("SELECT diagnosi, data FROM storico WHERE codiceFiscale = ? ORDER BY data DESC LIMIT 1");
+// La query seleziona la diagnosi più recente (LIMIT 1 -> ultima riga del risultato)
+$stmt2 = $conn->prepare("SELECT diagnosi, data
+                                FROM storico
+                                WHERE codiceFiscale = ?
+                                ORDER BY data DESC
+                                LIMIT 1");
+
 $stmt2->bind_param("s", $cf);
 $stmt2->execute();
-$ultimoEsame = $stmt2->get_result()->fetch_assoc();
+$ultimoEsame = $stmt2->get_result()->fetch_assoc(); // Salvo il risultato (diagnosi e data)
 
-$reparti = $conn->query("SELECT nomeReparto FROM reparto")->fetch_all(MYSQLI_ASSOC);
-$reparti = array_column($reparti, 'nomeReparto');
-$conteggi = [];
+// Salvo in un array tutti i reparti
+$reparti = $conn->query("SELECT nomeReparto
+                                FROM reparto")->fetch_all(MYSQLI_ASSOC);
+
+/*
+fetch_all(MYSQLI_ASSOC) -> legge tutte le righe insieme e restituisce un array di array associativi
+fetch_assoc() -> legge una singola riga dal risultato della query come array associativo (con while)
+*/
+
+$reparti = array_column($reparti, 'nomeReparto'); // Prende solo la colonna 'nomeReparto' dall'array associativo e restituisce un array semplice con i nomi dei reparti
+$conteggi = []; // Array che conterrà il numero di esami per ogni reparto, da passare al grafico
+
+// Per ogni reparto, conta il numero di esami effettuati dal paziente in quel reparto
 foreach($reparti as $rep){
+    // La query conta il numero di esami per ogni reparto
     $stmt3 = $conn->prepare("
-        SELECT COUNT(*) as tot FROM storico s 
+        SELECT COUNT(*) as tot
+        FROM storico s 
         JOIN esame e ON s.codiceEsame = e.codiceEsame
         JOIN ambulatorio a ON e.codiceAmbulatorio = a.codiceAmbulatorio
         JOIN reparto r ON a.codiceReparto = r.codiceReparto
         WHERE s.codiceFiscale = ? AND r.nomeReparto = ?
     ");
-    $stmt3->bind_param("ss", $cf, $rep);
+    $stmt3->bind_param("ss", $cf, $rep); // $rep è il nome del reparto, $cf è il codice fiscale del paziente
     $stmt3->execute();
-    $res = $stmt3->get_result()->fetch_assoc();
-    $conteggi[] = $res['tot'];
+    $res = $stmt3->get_result()->fetch_assoc(); // Il risultato è un array associativo con la chiave 'tot' che contiene il numero di esami per quel reparto
+    $conteggi[] = $res['tot']; // Creo un array semplice con i conteggi, da passare al grafico (stesso ordine dei reparti)
 }
 
+// Prendo le informazioni del paziente per mostrarle nella dashboard
 $stmtInfo = $conn->prepare("
     SELECT nome, cognome, dataNascita, ind_citta, ind_via, ind_civico, ind_cap 
     FROM paziente 
@@ -39,6 +61,7 @@ $stmtInfo->bind_param("s", $cf);
 $stmtInfo->execute();
 $paziente = $stmtInfo->get_result()->fetch_assoc();
 
+// Prendo i pagamenti effettuati dal paziente per mostrarli nella dashboard
 $stmtPag = $conn->prepare("
     SELECT codicePagamento, dataPagamento, somma, metodo 
     FROM pagamento 
@@ -59,19 +82,23 @@ $pagamenti = $stmtPag->get_result();
     </head>
     <body>
         <?php require_once("../components/menuPaziente.php"); ?>
+
+        <!-- Overlay per chiudere il menu quando è aperto -->
         <div id="overlay" onclick="toggleMenu()"></div>
         <div id="mainContent"></div>
 
+        <!-- Contenuto principale della dashboard -->
         <header class="top-bar">
             <button class="hamburger" onclick="toggleMenu()">☰</button>
             <h1>Benvenuto, <?= $paziente['nome'] ?></h1>
         </header>
-     
 
+        <!-- Creo il grafico -->
         <div class="chart-wrapper">
             <canvas id="graficoEsami" width="400" height="200"></canvas>
         </div>
 
+        <!-- Sezione profilo e statistiche -->
         <div class="card">
             <h3>PROFILO</h3>
             <p><strong>Nome:</strong> <?= $paziente['nome'] ?></p>
@@ -105,11 +132,13 @@ $pagamenti = $stmtPag->get_result();
             <div class="card">
                 <h4>PAGAMENTI</h4>
                 <ul>
-                    <?php while($row = $pagamenti->fetch_assoc()): ?>
+                    <?php while($row = $pagamenti->fetch_assoc()): /*row contiene la riga dell'array, che scorre a ogni ciclo*/?>
                         <li>
                             <?= $row['dataPagamento'] ?> – <?= $row['somma'] ?> € (<?= $row['metodo'] ?>)
                             <?php
-                                $stmtFattura = $conn->prepare("SELECT codiceFattura FROM fattura WHERE codicePagamento = ?");
+                                $stmtFattura = $conn->prepare("SELECT codiceFattura
+                                                                        FROM fattura
+                                                                        WHERE codicePagamento = ?");
                                 $stmtFattura->bind_param("i", $row['codicePagamento']);
                                 $stmtFattura->execute();
                                 $resultFattura = $stmtFattura->get_result();
