@@ -5,18 +5,18 @@ $cf = $_SESSION['codiceFiscale'];
 
 // Calcola il numero totale di esami effettuati dal paziente con codice fiscale $cf
 $stmt = $conn->prepare("SELECT COUNT(*) as totaleEsami
-                                FROM storico
-                                WHERE codiceFiscale = ?");
+                        FROM storico
+                        WHERE codiceFiscale = ?");
 $stmt->bind_param("s", $cf); // Dove la query trova '?' sostituisci con il valore di $cf (codice fiscale del paziente, s -> stringa)
 $stmt->execute(); // Esegui la query
 $totaleEsami = $stmt->get_result()->fetch_assoc()['totaleEsami']; // Dal risultato della query, crea un array associativo e prendi il valore della chiave 'totaleEsami'
 
 // La query seleziona la diagnosi più recente (LIMIT 1 -> ultima riga del risultato)
 $stmt2 = $conn->prepare("SELECT diagnosi, data
-                                FROM storico
-                                WHERE codiceFiscale = ?
-                                ORDER BY data DESC
-                                LIMIT 1");
+                        FROM storico
+                        WHERE codiceFiscale = ?
+                        ORDER BY data DESC
+                        LIMIT 1");
 
 $stmt2->bind_param("s", $cf);
 $stmt2->execute();
@@ -24,7 +24,7 @@ $ultimoEsame = $stmt2->get_result()->fetch_assoc(); // Salvo il risultato (diagn
 
 // Salvo in un array tutti i reparti
 $reparti = $conn->query("SELECT nomeReparto
-                                FROM reparto")->fetch_all(MYSQLI_ASSOC);
+                        FROM reparto")->fetch_all(MYSQLI_ASSOC);
 
 /*
 fetch_all(MYSQLI_ASSOC) -> legge tutte le righe insieme e restituisce un array di array associativi
@@ -137,8 +137,8 @@ $pagamenti = $stmtPag->get_result();
                             <?= $row['dataPagamento'] ?> – <?= $row['somma'] ?> € (<?= $row['metodo'] ?>)
                             <?php
                                 $stmtFattura = $conn->prepare("SELECT codiceFattura
-                                                                        FROM fattura
-                                                                        WHERE codicePagamento = ?");
+                                                                FROM fattura
+                                                                WHERE codicePagamento = ?");
                                 $stmtFattura->bind_param("i", $row['codicePagamento']);
                                 $stmtFattura->execute();
                                 $resultFattura = $stmtFattura->get_result();

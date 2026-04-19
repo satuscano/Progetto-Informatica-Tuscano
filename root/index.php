@@ -11,23 +11,40 @@
             <h2>Login</h2>
 
             <?php
-            session_start();
+            include('inc/auth.php');
+            if(isset($datiUtente)){
+                header("Location: dashboard.php");
+                // Reindirizzo alla dashboard in base al ruolo
+                        switch ($datiUtente['ruolo']) {
+                            case 'paziente':
+                                header("Location: areaPazienti/dashboard.php");
+                                break;
+                            case 'medico':
+                                header("Location: areaMedici/dashboard.php");
+                                break;
+                            case 'admin':
+                                header("Location: areaAdmin/dashboard.php");
+                                break;
+                header("Location: area".$datiUtente['ruolo']."/dashboard.php");
+                exit;
+            }
+            ////session_start(); // Avvio la sessione (serve a auth.php e logout.php)
 
-            $msg = ""; // Variabile per messaggi di errore
+            //$msg = ""; // Variabile per messaggi di errore
 
             if($_SERVER['REQUEST_METHOD'] == 'POST'){ // Se il form è stato inviato tramite POST
-                $codiceFiscale = $_POST['codiceFiscale']; // Prendo il codice fiscale inserito
-                $password = $_POST['password']; // Prendo la password inserita
+                $codiceFiscale = $_POST['codiceFiscale']; // Prendo e salvo il codice fiscale inserito
+                $password = $_POST['password']; // Prendo e salvo la password inserita
 
                 $conn = new mysqli("localhost", "root", "", "databaseprogetto");
                 if($conn->connect_error) die("Connessione fallita: ".$conn->connect_error);
 
                 $stmt = $conn->prepare("SELECT ruolo, password
-                                                FROM users
-                                                WHERE codiceFiscale = ?");
+                                        FROM users
+                                        WHERE codiceFiscale = ?");
                 $stmt->bind_param("s", $codiceFiscale);
                 $stmt->execute();
-                $result = $stmt->get_result();
+                $result = $stmt->get_result(); // Eseguo la query e prendo il risultato
 
                 if($result->num_rows == 1){ // Se esiste un utente con quel codice fiscale
                     $row = $result->fetch_assoc();

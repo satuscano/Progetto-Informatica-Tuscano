@@ -12,6 +12,7 @@ $stmtInfo->bind_param("s", $cf);
 $stmtInfo->execute();
 $paziente = $stmtInfo->get_result()->fetch_assoc();
 
+// Query per avere tutti gli esami prenotati con dati del medico e prenotazione
 $stmtEsami = $conn->prepare("
     SELECT 
     esame.codiceEsame,
