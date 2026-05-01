@@ -1,2 +1,4 @@
-fare prenota.php
-capire modifica e annulla prenotazione
+richiesta registrazione via mail (php mailer, altervista)
+prenota
+modifica prenotazione (tramite id esame + verifica id)
+bannmer medico nuove prenotazioni

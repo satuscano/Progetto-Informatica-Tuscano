@@ -25,8 +25,10 @@
                             case 'admin':
                                 header("Location: areaAdmin/dashboard.php");
                                 break;
+                        
                 header("Location: area".$datiUtente['ruolo']."/dashboard.php");
                 exit;
+            }
             }
             ////session_start(); // Avvio la sessione (serve a auth.php e logout.php)
 
